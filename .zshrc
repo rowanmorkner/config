@@ -43,6 +43,17 @@ git_commit(){
   git commit -m "$*"
 }
 
+compilecpp(){
+  g++ "$*" -Wall -Werror -Wuninitialized -std=c++17
+}
+
+goToSchoolDir(){
+  cd ~/Documents/school/"$*"
+}
+
+goto211(){
+cd ~/Documents/school/s25/csci211/"$*"
+}
 #----aliases --------
 alias oh='launch_openhands'
 alias v='nvim'
@@ -52,7 +63,11 @@ alias ga='git add .'
 alias gd='git diff --cached'
 alias gpm='git push -u origin HEAD'
 alias gc='git_commit'
-
+alias jek='bundle exec jekyll serve'
+alias vkey='v ~/.config/nvim/lua/config/keymap.lua'
+alias gpp='compilecpp'
+alias school='goToSchoolDir'
+alias csci='goto211'
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
