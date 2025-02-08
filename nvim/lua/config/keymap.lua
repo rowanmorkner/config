@@ -1,3 +1,4 @@
+
 --open file browser
 vim.keymap.set("n", "`", "<Cmd>NvimTreeFindFileToggle<CR>", { remap = true, silent = true })
 --jump left to file browser 
@@ -33,10 +34,10 @@ vim.keymap.set("n", "QQ", "<cmd>wqa<cr>", { remap = true, silent = true })
 vim.keymap.set("n", "<leader>f", "<cmd>!stlua %<cr>", { remap = true, silent = true })
 
 --shortcuts for brackets
-vim.keymap.set("i", "{", "{}<esc>i", { remap = true, silent = true })
-vim.keymap.set("i", "(", "()<esc>i", { remap = true, silent = true })
-vim.keymap.set("i", "[", "[]<esc>i", { remap = true, silent = true })
+--vim.keymap.set("i", "{", "{}<esc>i", { remap = true, silent = true })
+--vim.keymap.set("i", "(", "()<esc>i", { remap = true, silent = true })
+--vim.keymap.set("i", "[", "[]<esc>i", { remap = true, silent = true })
 
 -- selection, cutting, pasting, commenting
 --vim.keymap.set("n", "<cmd>j<cr>", "", { remap = true, silent = true })
-
+-- 

@@ -68,7 +68,14 @@ alias vkey='v ~/.config/nvim/lua/config/keymap.lua'
 alias gpp='compilecpp'
 alias school='goToSchoolDir'
 alias csci='goto211'
+alias config='cd ~/githubAll/config'
+alias ohmyzsh="v ~/.oh-my-zsh"
 
+#ctrl-b % - divide down middle 
+#ctrl-b " create a horizontal line
+#ctrl-b q show pane numbers and type num to switch pain
+#ctrl-b 
+#
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
@@ -164,5 +171,4 @@ export ZSH="$HOME/.oh-my-zsh"
 #
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
 export PATH="/opt/homebrew/opt/ruby/bin:$PATH"

@@ -6,7 +6,5 @@ vim.opt.termguicolors = true
 
 require("config.lazy")
 require("config.keymap")
-
 require("config.settings")
-
-
+require("autoclose").setup()
