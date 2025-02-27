@@ -4,7 +4,7 @@ return {
     build = ":MasonUpdate",
     config = function()
       require("mason").setup()
-    end
+    end,
   },
   {
     "williamboman/mason-lspconfig.nvim",
@@ -13,10 +13,13 @@ return {
         ensure_installed = {
           "clangd",    -- C/C++ language server
           "pyright",   -- Python language server
+          "eslint",    -- ESLint language server
+          "ts_ls",     -- TypeScript language server
+          "html",      -- HTML language server
         },
         automatic_installation = true,
       })
-    end
+    end,
   },
   {
     "neovim/nvim-lspconfig",
@@ -24,19 +27,7 @@ return {
       local lspconfig = require("lspconfig")
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-      -- Keybindings for LSP functionality
-      vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { desc = "Go to declaration" })
-      vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = "Go to definition" })
-      vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = "Show hover information" })
-      vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, { desc = "Go to implementation" })
-      vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, { desc = "Show signature help" })
-      vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, { desc = "Go to type definition" })
-      vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, { desc = "Rename symbol" })
-      vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, { desc = "Code actions" })
-      vim.keymap.set('n', 'gr', vim.lsp.buf.references, { desc = "Find references" })
-      vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, { desc = "Format code" })
-
-      -- Configure C/C++ LSP
+      -- Configure C/C++ LSP (clangd)
       lspconfig.clangd.setup({
         capabilities = capabilities,
         cmd = {
@@ -45,11 +36,11 @@ return {
           "--clang-tidy",
           "--completion-style=detailed",
           "--header-insertion=iwyu",
-          "--suggest-missing-includes"
-        }
+          "--suggest-missing-includes",
+        },
       })
 
-      -- Configure Python LSP
+      -- Configure Python LSP (pyright)
       lspconfig.pyright.setup({
         capabilities = capabilities,
         settings = {
@@ -57,19 +48,46 @@ return {
             analysis = {
               autoSearchPaths = true,
               useLibraryCodeForTypes = true,
-              diagnosticMode = "workspace"
-            }
-          }
-        }
-      }) 
+              diagnosticMode = "workspace",
+            },
+          },
+        },
+      })
 
-      -- Format on save
-      vim.cmd [[
-        augroup LspFormatting
-          autocmd!
-          autocmd BufWritePre * lua vim.lsp.buf.format()
-        augroup END
-      ]]
-    end
-  }
+      -- Configure ESLint LSP
+      lspconfig.eslint.setup({
+        capabilities = capabilities,
+        -- Optional: enable automatic formatting on save if desired
+        settings = {
+          format = { enable = true },
+        },
+        -- Define the root directory by looking for common ESLint config files or package.json
+        root_dir = lspconfig.util.root_pattern(
+          ".eslintrc",
+          ".eslintrc.js",
+          ".eslintrc.json",
+          ".eslintrc.yaml",
+          ".eslintrc.yml",
+          "package.json"
+        ),
+        filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+      })
+
+      -- Configure TypeScript LSP (ts_ls)
+      lspconfig.ts_ls.setup({
+        capabilities = capabilities,
+        filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+        init_options = {
+          hostInfo = "neovim",
+        },
+        -- Optionally, add additional settings specific to ts_ls here.
+      })
+
+      -- Configure HTML LSP
+      lspconfig.html.setup({
+        capabilities = capabilities,
+        filetypes = { "html" },
+      })
+    end,
+  },
 }

@@ -1,9 +1,7 @@
 
 return {
   {
-
-  --  hello world
-    -- Plugin: nvim-cmp (completion engine)
+  -- Plugin: nvim-cmp (completion engine)
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",  -- Load the plugin only when entering Insert mode to improve startup performance
     dependencies = {  -- List of plugins required for nvim-cmp to work properly
@@ -29,7 +27,6 @@ return {
             require("luasnip").lsp_expand(args.body)
           end,
         },
-
         -- Key mappings for interacting with the completion menu
         mapping = cmp.mapping.preset.insert({
           ["<C-Space>"] = cmp.mapping.complete(),  -- Manually trigger completion menu with Ctrl+Space

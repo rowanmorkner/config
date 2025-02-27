@@ -54,6 +54,21 @@ goToSchoolDir(){
 goto211(){
 cd ~/Documents/school/s25/csci211/"$*"
 }
+
+moveall() {
+  # Rename test files to follow the quizNN.cpp pattern
+  mv test04.cpp quiz04.cpp && mv test05.cpp quiz05.cpp &&
+
+  # Create target directories for quizzes 01 through 05
+  mkdir -p quizzes/q{01..05} &&
+
+  # Move each quiz file into its corresponding subdirectory
+  for file in quiz*.cpp; do
+    # Extract the two-digit number from the filename ("quiz01.cpp" -> "01")
+    dir="quizzes/q${file:4:2}"
+    mv "$file" "$dir/"
+  done
+}
 #----aliases --------
 alias oh='launch_openhands'
 alias v='nvim'
@@ -70,7 +85,6 @@ alias school='goToSchoolDir'
 alias csci='goto211'
 alias config='cd ~/githubAll/config'
 alias ohmyzsh="v ~/.oh-my-zsh"
-
 #ctrl-b % - divide down middle 
 #ctrl-b " create a horizontal line
 #ctrl-b q show pane numbers and type num to switch pain
