@@ -44,7 +44,8 @@ vim.keymap.set("n", "<leader>p", "<cmd>!prettier % --write<cr>", { remap = true,
 -- selection, cutting, pasting, commenting
 --vim.keymap.set("n", "<cmd>j<cr>", "", { remap = true, silent = true })
 
--- 
+-- deselect highlighted text after search
+vim.keymap.set("n", "<space>//", "<cmd>noh<cr>", { remap = true, silent = true })
 -- Keybindings for LSP functionality
 vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { desc = "Go to declaration" })
 vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = "Go to definition" })
