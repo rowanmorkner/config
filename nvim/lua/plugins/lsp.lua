@@ -23,9 +23,16 @@ return {
   },
   {
     "neovim/nvim-lspconfig",
+    dependencies = { "hrsh7th/cmp-nvim-lsp" },
     config = function()
       local lspconfig = require("lspconfig")
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+      -- Safely get capabilities with fallback
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      local has_cmp_lsp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+      if has_cmp_lsp then
+        capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
+      end
 
       -- Configure C/C++ LSP (clangd)
       lspconfig.clangd.setup({
