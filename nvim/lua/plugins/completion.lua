@@ -3,6 +3,7 @@ return {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
     dependencies = {
+      "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
       "L3MON4D3/LuaSnip",
@@ -44,6 +45,7 @@ return {
           end, { "i", "s" }),
         }),
         sources = cmp.config.sources({
+          { name = "nvim_lsp", max_item_count = 20 },
           { name = "luasnip", max_item_count = 10 },
         }, {
           { name = "buffer", max_item_count = 10 },
