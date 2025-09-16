@@ -1,8 +1,9 @@
 
 return {
   {
-  -- Plugin: nvim-cmp (completion engine)
+  -- Plugin: nvim-cmp (completion engine) - DISABLED DUE TO BUFFER ERROR
     "hrsh7th/nvim-cmp",
+    enabled = false,
     event = "InsertEnter",  -- Load the plugin only when entering Insert mode to improve startup performance
     dependencies = {  -- List of plugins required for nvim-cmp to work properly
       "hrsh7th/cmp-nvim-lsp",  -- Enables LSP-based autocompletion (e.g., function names, variables)
@@ -17,6 +18,10 @@ return {
     config = function()
       -- Load the completion engine
       local cmp = require("cmp")
+      local luasnip = require("luasnip")
+
+      -- Load friendly snippets
+      require("luasnip.loaders.from_vscode").lazy_load()
 
       -- Set up nvim-cmp with specific configuration
       cmp.setup({
@@ -24,9 +29,21 @@ return {
         snippet = {
           expand = function(args)
             -- Use LuaSnip to expand snippets when triggered
-            require("luasnip").lsp_expand(args.body)
+            luasnip.lsp_expand(args.body)
           end,
         },
+        -- Disable completion on certain file types to prevent errors
+        enabled = function()
+          -- disable completion in comments
+          local context = require 'cmp.config.context'
+          -- keep command mode completion enabled when cursor is in a comment
+          if vim.api.nvim_get_mode().mode == 'c' then
+            return true
+          else
+            return not context.in_treesitter_capture("comment")
+              and not context.in_syntax_group("Comment")
+          end
+        end,
         -- Key mappings for interacting with the completion menu
         mapping = cmp.mapping.preset.insert({
           ["<C-Space>"] = cmp.mapping.complete(),  -- Manually trigger completion menu with Ctrl+Space
@@ -36,6 +53,10 @@ return {
           ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()  -- If completion menu is visible, select the next item
+            elseif luasnip.expandable() then
+              luasnip.expand()
+            elseif luasnip.expand_or_jumpable() then
+              luasnip.expand_or_jump()
             else
               fallback()  -- Otherwise, use default Tab behavior
             end
@@ -45,6 +66,8 @@ return {
           ["<S-Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_prev_item()  -- If completion menu is visible, select the previous item
+            elseif luasnip.jumpable(-1) then
+              luasnip.jump(-1)
             else
               fallback()  -- Otherwise, use default Shift+Tab behavior
             end
@@ -53,9 +76,8 @@ return {
 
         -- Define completion sources (where suggestions come from)
         sources = cmp.config.sources({
-          { name = "copilot", group_index = 2 },  -- Copilot suggestions
-          { name = "nvim_lsp", group_index = 2 },  -- Get completion suggestions from the Language Server Protocol (LSP)
-          { name = "luasnip", group_index = 2 },  -- Enable snippet expansion
+          { name = "nvim_lsp" },  -- Get completion suggestions from the Language Server Protocol (LSP)
+          { name = "luasnip" },  -- Enable snippet expansion
         }, {
           { name = "buffer" },  -- Add words from the current buffer as suggestions
           { name = "path" },  -- Enable file path completion

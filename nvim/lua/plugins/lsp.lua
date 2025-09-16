@@ -1,13 +1,21 @@
 return {
   {
     "williamboman/mason.nvim",
-    build = ":MasonUpdate",
     config = function()
-      require("mason").setup()
+      require("mason").setup({
+        ui = {
+          icons = {
+            package_installed = "✓",
+            package_pending = "➜",
+            package_uninstalled = "✗"
+          }
+        }
+      })
     end,
   },
   {
     "williamboman/mason-lspconfig.nvim",
+    dependencies = { "williamboman/mason.nvim" },
     config = function()
       require("mason-lspconfig").setup({
         ensure_installed = {
@@ -16,6 +24,7 @@ return {
           "eslint",    -- ESLint language server
           "ts_ls",     -- TypeScript language server
           "html",      -- HTML language server
+          "r_language_server", -- R language server
         },
         automatic_installation = true,
       })
@@ -23,9 +32,10 @@ return {
   },
   {
     "neovim/nvim-lspconfig",
+    dependencies = { "hrsh7th/cmp-nvim-lsp" },
     config = function()
       local lspconfig = require("lspconfig")
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
+      local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
       -- Configure C/C++ LSP (clangd)
       lspconfig.clangd.setup({
@@ -87,6 +97,18 @@ return {
       lspconfig.html.setup({
         capabilities = capabilities,
         filetypes = { "html" },
+      })
+
+      -- Configure R LSP
+      lspconfig.r_language_server.setup({
+        capabilities = capabilities,
+        settings = {
+          r = {
+            lsp = {
+              rich_documentation = false
+            }
+          }
+        }
       })
     end,
   },

@@ -58,3 +58,42 @@ vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, { desc = "Code actions
 vim.keymap.set('n', 'gr', vim.lsp.buf.references, { desc = "Find references" })
 vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, { desc = "Format code" })
 
+-- Data Science and REPL keybindings
+-- Variable inspector and environment viewer
+vim.keymap.set('n', '<leader>vi', function()
+  -- Create a simple variable inspector by executing environment listing code
+  local filetype = vim.bo.filetype
+  if filetype == 'python' or string.find(vim.fn.expand('%'), '%.qmd$') then
+    vim.cmd('MoltenEvaluateLine')
+    -- Add Python variable listing
+    vim.fn.append(vim.fn.line('.'), 'print("=== VARIABLES ==="); print([f"{k}: {type(v)}" for k, v in locals().items() if not k.startswith("_")])')
+    vim.cmd('normal! j')
+    vim.cmd('MoltenEvaluateLine')
+  elseif filetype == 'r' then
+    vim.cmd('MoltenEvaluateLine')
+    vim.fn.append(vim.fn.line('.'), 'cat("=== VARIABLES ===\\n"); str(ls.str())')
+    vim.cmd('normal! j') 
+    vim.cmd('MoltenEvaluateLine')
+  end
+end, { desc = "Show variable inspector" })
+
+-- Help documentation toggle with telescope
+vim.keymap.set('n', '<leader>hh', function()
+  -- Check if help window exists and close it
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    local buf_type = vim.api.nvim_buf_get_option(buf, 'buftype')
+    if buf_type == 'help' then
+      vim.api.nvim_win_close(win, false)
+      return
+    end
+  end
+  -- Open telescope help if no help window exists
+  vim.cmd('Telescope help_tags')
+end, { desc = "Toggle help browser" })
+
+-- Quick REPL controls
+vim.keymap.set('n', '<leader>rt', '<cmd>IronRepl<cr>', { desc = "Toggle REPL" })
+vim.keymap.set('n', '<leader>rh', '<cmd>IronHide<cr>', { desc = "Hide REPL" })
+vim.keymap.set('n', '<leader>rs', '<cmd>IronRestart<cr>', { desc = "Restart REPL" })
+

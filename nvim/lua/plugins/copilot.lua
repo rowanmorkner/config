@@ -5,46 +5,36 @@ return {
     event = "InsertEnter",
     config = function()
       require("copilot").setup({
-        -- panel = {
-        --   enabled = true,
-        --   auto_refresh = true,
-        --   keymap = {
-        --     jump_prev = "[[",
-        --     jump_next = "]]",
-        --     accept = "<CR>",
-        --     refresh = "gr",
-        --     open = "<M-CR>"
-        --   },
-        -- },
-        -- suggestion = {
-        --   enabled = true,
-        --   auto_trigger = true,
-        --   debounce = 75,
-        --   keymap = {
-        --     accept = "<M-l>",
-        --     accept_word = "<M-w>",
-        --     accept_line = "<M-]>",
-        --     next = "<M-]>",
-        --     prev = "<M-[>",
-        --     dismiss = "<C-]>",
-        --   },
-        -- },
-        -- filetypes = {
-        --   yaml = false,
-        --   markdown = false,
-        --   help = false,
-        --   gitcommit = false,
-        --   gitrebase = false,
-        --   hgcommit = false,
-        --   svn = false,
-        --   cvs = false,
-        --   ["."] = false,
-        -- },
+        suggestion = {
+          enabled = true,
+          auto_trigger = true,
+          debounce = 75,
+          keymap = {
+            accept = "<C-j>",      -- Changed to Ctrl+j (easier to reach)
+            accept_word = "<C-k>", -- Accept just one word
+            next = "<C-n>",        -- Next suggestion  
+            prev = "<C-p>",        -- Previous suggestion
+            dismiss = "<C-e>",     -- Dismiss suggestion
+          },
+        },
+        filetypes = {
+          yaml = true,
+          markdown = true,
+          quarto = true,         -- Enable for .qmd files
+          python = true,
+          r = true,
+          lua = true,
+          help = false,
+          gitcommit = false,
+          gitrebase = false,
+          ["."] = false,
+        },
       })
     end,
   },
   {
     "zbirenbaum/copilot-cmp",
+    enabled = false, -- Disabled since nvim-cmp is disabled
     dependencies = { "copilot.lua" },
     config = function()
       require("copilot_cmp").setup()
