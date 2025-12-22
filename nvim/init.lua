@@ -8,4 +8,7 @@ require("config.lazy")
 require("config.keymap")
 require("config.settings")
 require("autoclose").setup()
-require'lspconfig'.biome.setup{}
+
+-- Configure Biome LSP using new vim.lsp.config API
+vim.lsp.config.biome = {}
+vim.lsp.enable('biome')
