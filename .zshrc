@@ -3,19 +3,21 @@ export PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 
-if [ -f ~/.bash_profile ]; then 
-    . ~/.bash_profile
-fi
-
-if [ -f ~/.bashrc ]; then 
-    . ~/.bashrc
-fi
+# if [ -f ~/.bash_profile ]; then 
+#     . ~/.bash_profile
+# fi
+#
+# if [ -f ~/.bashrc ]; then 
+#     . ~/.bashrc
+# fi
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+
+export ZSH="$HOME/.oh-my-zsh"
+export ZSH_THEME="robbyrussell"
 
 plugins=(git)
 
@@ -84,7 +86,24 @@ alias gpp='compilecpp'
 alias school='goToSchoolDir'
 alias csci='goto211'
 alias config='cd ~/githubAll/config'
-alias ohmyzsh="v ~/.oh-my-zsh"
+alias ohmyzsh='v ~/.oh-my-zsh'
+
+# Show merged branches for review (excludes main and dev)
+alias gitshow='echo "Merged into main:" && git branch --merged main | grep -vE "main|dev" && echo "\nMerged into dev:" && git branch --merged dev | grep -vE "main|dev"'
+
+# Delete local branches merged into main or dev
+alias gitclean='git branch --merged main | grep -vE "main|dev" | xargs -r git branch -d && git branch --merged dev | grep -vE "main|dev" | xargs -r git branch -d'
+
+# Open a PR from dev -> main (uses GitHub CLI)
+alias gitpr='gh pr create --base main --head dev --fill'
+
+# Prune stale remote-tracking refs
+alias gitprune='git fetch -p'
+
+# Full reset: switch to main, pull latest, delete old dev, start fresh
+alias gitreset='git checkout main && git pull && git branch -d dev && git checkout -b dev && git push -u origin dev'
+
+
 #ctrl-b % - divide down middle 
 #ctrl-b " create a horizontal line
 #ctrl-b q show pane numbers and type num to switch pain
@@ -186,3 +205,5 @@ export ZSH="$HOME/.oh-my-zsh"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+
+. "$HOME/.local/bin/env"
